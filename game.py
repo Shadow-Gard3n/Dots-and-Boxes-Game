@@ -8,16 +8,25 @@ def grid(a,logic):
         print()
          
 def joininggrid(a,logic,x):
+    
     while True:
-        choice1, choice2 = map(int, input(f"Type the two points which Player {x} wants to join: ").split())
-        if choice1+1 == choice2 and logic[0][choice1-11] == "   ":
-            logic[0][choice1-11] = "---"
-            return choice1,choice2
-        elif choice1+a == choice2 and logic[1][choice1-11] == "     ":
-            logic[1][choice1-11] = "|    "
-            return choice1,choice2
-        else:
-            print("Wrong input")    
+        try:
+            choice1, choice2 = map(int, input(f"Type the two points which Player {x} wants to join: ").split())
+            if choice1+1 == choice2 and logic[0][choice1-11] == "   ":
+                logic[0][choice1-11] = "---"
+                return choice1,choice2
+            elif choice1+a == choice2 and logic[1][choice1-11] == "     ":
+                logic[1][choice1-11] = "|    "
+                return choice1,choice2
+            else:
+                print("Wrong input") 
+        except ValueError:
+            print("Invalid input. Please enter two valid integers separated by a space.")
+        
+        except IndexError:
+            print("Out of bounds! Please select points that are within the grid.")
+          
+                 
 
 def gamelogic(logic,wins,a):
     while True:
