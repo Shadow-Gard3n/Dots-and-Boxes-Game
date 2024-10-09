@@ -12,52 +12,75 @@ def joininggrid(a,logic,x):
         choice1, choice2 = map(int, input(f"Type the two points which Player {x} wants to join: ").split())
         if choice1+1 == choice2 and logic[0][choice1-11] == "   ":
             logic[0][choice1-11] = "---"
-            return logic
+            return choice1,choice2
         elif choice1+a == choice2 and logic[1][choice1-11] == "     ":
             logic[1][choice1-11] = "|    "
-            return logic
+            return choice1,choice2
         else:
             print("Wrong input")    
 
 def gamelogic(logic,wins,a):
     while True:
         while True:
-            joininggrid(a,logic,1)
-            z = victor(logic,1,a)
+            choice1, choice2 = joininggrid(a,logic,1)
+            z = victor(logic,1,a,choice1,choice2)
             grid(a,logic)
-            if z == True:
+            if z:
                 wins[0] += 1
-            elif z == False:
+            else:
                 break    
             if logic[0].count("---") + logic[1].count("|    ") + logic[1].count("|  1 ") + logic[1].count("|  2 ") == (a-1)*(a)*2:
                 return
         while True:
-            joininggrid(a,logic,2)
-            z = victor(logic,2,a)
+            choice1, choice2 = joininggrid(a,logic,2)
+            z = victor(logic,2,a,choice1,choice2)
             grid(a,logic)
-            if z == True:
+            if z:
                 wins[1] += 1
-            elif z == False:
+            else:
                 break    
             if logic[0].count("---") + logic[1].count("|    ") + logic[1].count("|  1 ") + logic[1].count("|  2 ") == (a-1)*(a)*2:
                 return
 
-def victor(logic,player,a):
+def victor(logic,player,a,choice1,choice2):
     z = False
-    for x in range(0,a*a):
-        if logic[0][x] == "---" and (logic[1][x] == "|    " or logic[1][x] == "|  1 " or logic[1][x] == "|  2 ") and (logic[1][x+1] == "|    " or logic[1][x+1] == "|  1 " or logic[1][x+1] == "|  2 ") and logic[0][x+a] == "---" and player == 1:
-            logic[1][x] = "|  1 "
-            z = True
-        elif logic[0][x] == "---" and (logic[1][x] == "|    " or logic[1][x] == "|  1 " or logic[1][x] == "|  2 ") and (logic[1][x+1] == "|    " or logic[1][x+1] == "|  1 " or logic[1][x+1] == "|  2 ") and logic[0][x+a] == "---" and player == 2:
-            logic[1][x] = "|  2 " 
-            z = True         
+    if choice1 + 1 == choice2:
+        if logic[1][choice1-11] == "|    " and (logic[1][choice1-10] == "|    " or logic[1][choice1-10] == "|  1 " or logic[1][choice1-10] == "|  2 ") and logic[0][choice1-11+a] == "---":
+            if player == 1:
+                logic[1][choice1-11] = "|  1 "
+                z = True
+            elif player == 2:
+                logic[1][choice1-11] = "|  2 " 
+                z = True 
+        if logic[0][choice1-11-a] == "---" and (logic[1][choice1-11-a] == "|    " or logic[1][choice1-11-a] == "|  1 " or logic[1][choice1-11-a] == "|  2 ") and (logic[1][choice1-10-a] == "|    " or logic[1][choice1-10-a] == "|  1 " or logic[1][choice1-10-a] == "|  2 "):
+            if player == 1:
+                logic[1][choice1-11-a] = "|  1 "
+                z = True
+            elif player == 2:
+                logic[1][choice1-11-a] = "|  2 " 
+                z = True
+    elif choice1 + a == choice2:
+        if logic[0][choice1-11] == "---" and logic[0][choice1-11+a] == "---" and (logic[1][choice1-10] == "|    " or logic[1][choice1-10] == "|  1 " or logic[1][choice1-10] == "|  2 "):
+            if player == 1:
+                logic[1][choice1-11] = "|  1 "
+                z = True
+            elif player == 2:
+                logic[1][choice1-11] = "|  2 " 
+                z = True 
+        if logic[0][choice1-12] == "---" and logic[0][choice1-12+a] == "---" and logic[1][choice1-12] == "|    ":
+            if player == 1:
+                logic[1][choice1-12] = "|  1 "
+                z = True
+            elif player == 2:
+                logic[1][choice1-12] = "|  2 " 
+                z = True        
     return z   
-           
+
 def main():
     a = 0
     while a>8 or a<3:
-        print("Please pick between 8 and 3")
-        a = int(input("How many lines of pattern do you want: "))
+        print("Please pick between 3 and 8")
+        a = int(input("How many lines of pattern do you want: "))    
     prlgap = []
     prdgap = []
     for x in range(a*a):
